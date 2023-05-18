@@ -27,9 +27,27 @@ async function run() {
 
 
     const toysCollection = client.db('toyLand').collection('heros')
+    const marvelToysCollection = client.db('toyLand').collection('marvelToy')
+    const transformerToysCollection = client.db('toyLand').collection('transformerToys')
+    const starToysCollection = client.db('toyLand').collection('starToy')
 
     app.get('/toys', async(req, res) => {
         const cursor = toysCollection.find()
+        const result = await cursor.toArray()
+        res.send(result)
+    })
+    app.get('/marvelToys', async(req, res) => {
+        const cursor = marvelToysCollection.find()
+        const result = await cursor.toArray()
+        res.send(result)
+    })
+    app.get('/transformerToys', async(req, res) => {
+        const cursor = transformerToysCollection.find()
+        const result = await cursor.toArray()
+        res.send(result)
+    })
+    app.get('/starToys', async(req, res) => {
+        const cursor = starToysCollection.find()
         const result = await cursor.toArray()
         res.send(result)
     })
