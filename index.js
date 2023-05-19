@@ -24,11 +24,11 @@ async function run() {
   try {
 
     client.connect();
-
     const marvelToysCollection = client.db('toyLand').collection('marvelToy')
     const transformerToysCollection = client.db('toyLand').collection('transformerToys')
     const starToysCollection = client.db('toyLand').collection('starToy')
     const addToysCollection = client.db('toyLand').collection('addToy')
+
 
     // marvel toys 
     app.get('/marvelToys', async(req, res) => {
@@ -81,7 +81,7 @@ async function run() {
       const result = await addToysCollection.find(query).toArray()
       res.send(result)
     })
-
+    
     app.get('/addToy/:id', async(req, res) => {
       const id = req.params.id
       const query = {_id : new ObjectId(id)}
@@ -117,6 +117,13 @@ async function run() {
       const result = await addToysCollection.updateOne(filter, toy , options)
       res.send(result)
     })
+    // search toy 
+    app.get('/searchToy', async(req, res) => {
+      const query = {toyName: req.query.toyName}
+      const result = await addToysCollection.find(query).toArray()
+      res.send(result)
+    })
+    
 
     
 
