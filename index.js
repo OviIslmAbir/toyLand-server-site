@@ -23,13 +23,13 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
 
-    // await client.connect();
-
+    client.connect();
 
     const toysCollection = client.db('toyLand').collection('heros')
     const marvelToysCollection = client.db('toyLand').collection('marvelToy')
     const transformerToysCollection = client.db('toyLand').collection('transformerToys')
     const starToysCollection = client.db('toyLand').collection('starToy')
+    const addToysCollection = client.db('toyLand').collection('addToy')
 
     app.get('/toys', async(req, res) => {
         const cursor = toysCollection.find()
@@ -75,6 +75,25 @@ async function run() {
       res.send(result)
     })
 
+    // add toys
+    app.get('/addToys', async(req, res) => {
+      const cursor = addToysCollection.find()
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
+    app.get('/addToy', async(req, res) => {
+      const query = {email: req.query.email}
+      const result = await addToysCollection.find(query).toArray()
+      res.send(result)
+    })
+
+    app.post('/addToy', async(req, res) =>{
+      const toys = req.body
+      const result = await addToysCollection.insertOne(toys)
+      res.send(result)
+    })
+
     
 
 
@@ -83,7 +102,7 @@ async function run() {
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } 
   finally {
-    // await client.close();
+    
   }
 }
 run().catch(console.log);
