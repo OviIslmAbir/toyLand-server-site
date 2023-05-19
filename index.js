@@ -93,6 +93,12 @@ async function run() {
       const result = await addToysCollection.insertOne(toys)
       res.send(result)
     })
+    app.delete('/addToy/:id', async(req, res) => {
+      const id = req.params.id
+      const query = {_id : new ObjectId(id)}
+      const result = await addToysCollection.deleteOne(query)
+      res.send(result)
+    })
 
     
 
