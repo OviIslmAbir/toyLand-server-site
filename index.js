@@ -25,17 +25,11 @@ async function run() {
 
     client.connect();
 
-    const toysCollection = client.db('toyLand').collection('heros')
     const marvelToysCollection = client.db('toyLand').collection('marvelToy')
     const transformerToysCollection = client.db('toyLand').collection('transformerToys')
     const starToysCollection = client.db('toyLand').collection('starToy')
     const addToysCollection = client.db('toyLand').collection('addToy')
 
-    app.get('/toys', async(req, res) => {
-        const cursor = toysCollection.find()
-        const result = await cursor.toArray()
-        res.send(result)
-    })
     // marvel toys 
     app.get('/marvelToys', async(req, res) => {
         const cursor = marvelToysCollection.find()
@@ -88,15 +82,39 @@ async function run() {
       res.send(result)
     })
 
+    app.get('/addToy/:id', async(req, res) => {
+      const id = req.params.id
+      const query = {_id : new ObjectId(id)}
+      const result =  await addToysCollection.findOne(query)
+      res.send(result)
+    })
+
     app.post('/addToy', async(req, res) =>{
       const toys = req.body
       const result = await addToysCollection.insertOne(toys)
       res.send(result)
     })
+
     app.delete('/addToy/:id', async(req, res) => {
       const id = req.params.id
       const query = {_id : new ObjectId(id)}
       const result = await addToysCollection.deleteOne(query)
+      res.send(result)
+    })
+
+    app.put('/addToy/:id', async(req, res) => {
+      const id = req.params.id
+      const filter = {_id: new ObjectId(id)}
+      const options = { upsert: true };
+      const updateToy = req.body
+      const toy = {
+          $set:{
+              price: updateToy.price,
+              quantity: updateToy.quantity ,
+              details: updateToy.details,
+          }
+      }
+      const result = await addToysCollection.updateOne(filter, toy , options)
       res.send(result)
     })
 
