@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 
 const app = express()
@@ -36,21 +36,46 @@ async function run() {
         const result = await cursor.toArray()
         res.send(result)
     })
+    // marvel toys 
     app.get('/marvelToys', async(req, res) => {
         const cursor = marvelToysCollection.find()
         const result = await cursor.toArray()
         res.send(result)
     })
+    app.get('/marvelToys/:id', async(req, res) => {
+      const id = req.params.id
+      const query = {_id : new ObjectId(id)}
+      const result =  await marvelToysCollection.findOne(query)
+      res.send(result)
+    })
+    
+    // transformer toys
     app.get('/transformerToys', async(req, res) => {
         const cursor = transformerToysCollection.find()
         const result = await cursor.toArray()
         res.send(result)
     })
+    app.get('/transformerToys/:id', async(req, res) => {
+      const id = req.params.id
+      const query = {_id : new ObjectId(id)}
+      const result =  await transformerToysCollection.findOne(query)
+      res.send(result)
+    })
+
+    // star wars toys
     app.get('/starToys', async(req, res) => {
         const cursor = starToysCollection.find()
         const result = await cursor.toArray()
         res.send(result)
     })
+    app.get('/starToys/:id', async(req, res) => {
+      const id = req.params.id
+      const query = {_id : new ObjectId(id)}
+      const result =  await starToysCollection.findOne(query)
+      res.send(result)
+    })
+
+    
 
 
 
